@@ -1,12 +1,12 @@
 # Inherit device configuration.
 $(call inherit-product, device/malata/smba1002/device-smba1002.mk)
 
-# Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_tablet_wifionly.mk)
+# Inherit some common LiquidSmooth stuff.
+$(call inherit-product, vendor/liquid/config/common_tablet.mk)
 
 # Change these to values from a stock SMBA1002 rom
 
-PRODUCT_NAME := cm_smba1002
+PRODUCT_NAME := liquid_smba1002
 PRODUCT_BRAND := Malata
 PRODUCT_DEVICE := smba1002
 PRODUCT_MODEL := Malata SMBA1002
@@ -16,3 +16,4 @@ PRODUCT_MANUFACTURER := Malata
 
 # Release name and versioning
 PRODUCT_RELEASE_NAME := SMBA1002
+PRODUCT_PROPERTY_OVERRIDES += ro.buildzipid=liquid.smba1002.$(shell date +%m%d%y).$(shell date +%H%M%S)
