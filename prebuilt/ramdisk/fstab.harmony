@@ -18,7 +18,7 @@
 ## part         - Partition # (1 based), or 'auto' for first usable partition.
 ## <sysfs_path> - List of sysfs paths to source devices
 ######################
-/devices/platform/sdhci-tegra.2/mmc_host/mmc1                  auto         auto    defaults voldmanaged=sdcard:auto
+/devices/platform/sdhci-tegra.2/mmc_host/mmc1                  auto         auto    defaults voldmanaged=sdcard1:auto
 /devices/platform/tegra-ehci.2			               auto         auto    defaults voldmanaged=usbdisk0:auto
 
 # recovery
