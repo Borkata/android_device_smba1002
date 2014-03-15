@@ -6,7 +6,7 @@ on init
 	mkdir /storage 0550 system sdcard_r
 	mkdir /storage/emulated 0555 root root
 	mkdir /storage/sdcard1 0700 root root
-	mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
+	mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
 	mkdir /storage/usbdisk0 0000 system system
 	mkdir /mnt/media_rw/usbdisk0 0700 media_rw media_rw
 	
@@ -181,7 +181,7 @@ service iprenew_eth0 /system/bin/dhcpcd -n
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
 
-service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
     class late_start
     disabled
 
