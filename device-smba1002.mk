@@ -14,9 +14,10 @@
 # limitations under the License.
 #
 TARGET_PREBUILT_RECOVERY_KERNEL := device/malata/smba1002/prebuilt/recovery_kernel
+TARGET_PREBUILT_KERNEL := device/malata/smba1002/prebuilt/kernel
 #Built from source kernel
-TARGET_KERNEL_CONFIG        := tegra_smba1002_defconfig
-TARGET_KERNEL_SOURCE        := kernel/malata/smba1002
+#TARGET_KERNEL_CONFIG        := tegra_smba1002_defconfig
+#TARGET_KERNEL_SOURCE        := kernel/malata/smba1002
 TARGET_ARCH=arm
 
 # Install smba1002 kernel modules from prebuilt
