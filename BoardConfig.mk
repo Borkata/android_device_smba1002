@@ -34,4 +34,4 @@ BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/malata/smba1002/default_recover
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 BOARD_HAS_MISC := true
 BOARD_HAS_REMOVABLE_STORAGE := true
-
+BOARD_RECOVERY_SWIPE := true
