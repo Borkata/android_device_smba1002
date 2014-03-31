@@ -17,3 +17,10 @@ PRODUCT_MANUFACTURER := Malata
 # Release name and versioning
 PRODUCT_RELEASE_NAME := SMBA1002
 PRODUCT_PROPERTY_OVERRIDES += ro.buildzipid=liquid.smba1002.$(shell date +%m%d%y).$(shell date +%H%M%S)
+
+# Bootanimation
+TARGET_BOOTANIMATION_PRELOAD 		:= true
+TARGET_BOOTANIMATION_TEXTURE_CACHE      := true
+TARGET_BOOTANIMATION_USE_RGB565         := true
+TARGET_SCREEN_HEIGHT 			:= 1024
+TARGET_SCREEN_WIDTH 			:= 600
