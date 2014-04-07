@@ -14,11 +14,11 @@
 # limitations under the License.
 #
 TARGET_PREBUILT_RECOVERY_KERNEL := device/malata/smba1002/prebuilt/recovery_kernel
-TARGET_PREBUILT_KERNEL := device/malata/smba1002/prebuilt/kernel
+#TARGET_PREBUILT_KERNEL := device/malata/smba1002/prebuilt/kernel
 #Built from source kernel
-#TARGET_KERNEL_CONFIG        := tegra_smba1002_defconfig
-#TARGET_KERNEL_SOURCE        := kernel/malata/smba1002
-TARGET_ARCH=arm
+TARGET_KERNEL_CONFIG        := tegra_smba1002_defconfig
+TARGET_KERNEL_SOURCE        := kernel/malata/smba1002
+TARGET_ARCH		    := arm
 
 # Install smba1002 kernel modules from prebuilt
 $(call inherit-product, device/malata/smba1002/smba1002-modules.mk)
@@ -53,7 +53,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
 	device/malata/smba1002/prebuilt/ramdisk/init.harmony.rc:root/init.harmony.rc \
 	device/malata/smba1002/prebuilt/ramdisk/fstab.harmony:root/fstab.harmony \
-	device/malata/smba1002/prebuilt/03sysctl:system/etc/init.d/03sysctl \
 	device/malata/smba1002/prebuilt/ntfs-3g:system/xbin/ntfs-3g
 
 #Set default.prop properties for root + adb

@@ -20,5 +20,27 @@
 # In particular, you can add lunch options with the add_lunch_combo
 # function: add_lunch_combo generic-eng
 export USE_CCACHE=1
-add_lunch_combo liquid_smba1002-userdebug
-
+add_lunch_combo vanir_smba1002-userdebug
+echo ""
+echo "Patching Adam Workspace..."
+echo ""
+for p in $(find device/malata/smba1002/patches/ -name "*.diff") 
+	do 
+		tmp=$(basename $p | awk -F"." '{print $1}')
+		if [ -f $tmp".p" ]; then
+			echo "Patch "$tmp" already applied"
+		else
+			echo -n "Apply patch "$tmp
+			patch -p1 < $p > /dev/null 2>&1
+			if [ $? == 0 ]; then
+				echo "     [DONE]"
+				touch $tmp".p"
+			else
+				echo "     [FAIL]"
+			fi
+		fi
+		echo "" 
+	done
+echo "Cleaning .orig and .rej files if any..."
+find . \( -name \*cpp.orig -o -name \*xml.orig -o -name \*.h.orig -o -name \*.java.orig -o -name \*.rej \) -delete
+echo ""
