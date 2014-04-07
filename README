@@ -1,21 +1,3 @@
 Here's my attempt to get smba1002 to boot 4.4.2 ASOP.
 
-Copy to android/device/malata/smba1002/
-
-run extract-files.sh or copy-files.sh that'll create your vendor directory
-
-go back to source root
-
-Shell Type: ". build/envsetup.sh && lunch"
-
-Let it finish.
-
-choose "vanir_smba1002"
-
-Then
-
-Shell Type: "mka bacon -j16" (replace 16 with whatever your machine can handle.)
-
-Wait for it to get done.
-Load it up and see if we can get a break LOL!!!!!!!
 
