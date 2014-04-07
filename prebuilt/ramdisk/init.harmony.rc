@@ -11,19 +11,14 @@ on init
     #External storage directories
     mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
-    mkdir /mnt/media_rw/sdcard2 0700 media_rw media_rw
     mkdir /storage/usbdisk0 0000 system system
     mkdir /mnt/media_rw/usbdisk0 0700 media_rw media_rw
-    mkdir /storage/usbdisk1 0000 system system
-    mkdir /mnt/media_rw/usbdisk1 0700 media_rw media_rw
 
     mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/sdcard2 0700 root root
     mkdir /storage/usbdisk0 0700 root root
-    mkdir /storage/usbdisk1 0700 root root
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
-    export SECONDARY_STORAGE /storage/sdcard1:/storage/sdcard2:/storage/usbdisk0:/storage/usbdisk1
+    export SECONDARY_STORAGE /storage/sdcard1:/storage/usbdisk0
 
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
     export EMULATED_STORAGE_TARGET /storage/emulated
@@ -35,16 +30,11 @@ on init
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
     # for backwards compatibility
-    symlink /storage/sdcard1 /internal_sd
-    symlink /storage/sdcard1 /mnt/internal_sd
-    symlink /storage/sdcard2 /microsd
-    symlink /storage/sdcard2 /mnt/microsd
+    symlink /storage/sdcard1 /microsd
+    symlink /storage/sdcard1 /mnt/microsd
     symlink /storage/usbdisk0 /usbdisk0
     symlink /storage/usbdisk0 /mnt/usbdisk0
-    symlink /storage/usbdisk1 /usbdisk1
-    symlink /storage/usbdisk1 /mnt/usbdisk1
     
-
     # Save bugreports as owner
     export BUGREPORT_WRITE_PATH /mnt/shell/sdcard0/0
     export BUGREPORT_READ_PATH /storage/sdcard0
@@ -69,8 +59,7 @@ on early-boot
 
 on fs
     mount_all /fstab.harmony
-    # Mount cache and system yaffs2 partitions here
-    mount yaffs2 mtd@cache /cache nosuid nodev
+    # Mount system yaffs2 partitions here
     mount yaffs2 mtd@system /system
     
     setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
@@ -98,9 +87,6 @@ on post-fs-data
 
 
 on boot
-# PQi Permissions
-#    chmod 0666 /sys/class/gpio/gpio27/value 
-
 # bluetooth permissions
     chmod 0660 /dev/ttyHS2
     chown bluetooth net_bt_stack /dev/ttyHS2
@@ -125,19 +111,19 @@ on boot
     chown system system /sys/class/backlight/pwm-backlight/brightness
 
 # Sensor
-#    chmod 666 /dev/tegra_mediaserver
-#    chmod 666 /dev/tegra_dc_0
-#    chmod 666 /dev/tegra_dc_1
-#    chmod 666 /dev/nvhost-ctrl
-#    chmod 666 /dev/nvhost-display
-#    chmod 666 /dev/nvhost-dsi
-#    chmod 666 /dev/nvhost-gr2d
-#    chmod 666 /dev/nvhost-gr3d
-#    chmod 666 /dev/nvhost-isp
-#    chmod 666 /dev/nvhost-mpe
-#    chmod 666 /dev/nvhost-vi
-#    chmod 664 /sys/bus/iio/devices/device0/lux
-#    chmod 664 /sys/bus/iio/devices/device0/proxim_ir
+    chmod 666 /dev/tegra_mediaserver
+    chmod 666 /dev/tegra_dc_0
+    chmod 666 /dev/tegra_dc_1
+    chmod 666 /dev/nvhost-ctrl
+    chmod 666 /dev/nvhost-display
+    chmod 666 /dev/nvhost-dsi
+    chmod 666 /dev/nvhost-gr2d
+    chmod 666 /dev/nvhost-gr3d
+    chmod 666 /dev/nvhost-isp
+    chmod 666 /dev/nvhost-mpe
+    chmod 666 /dev/nvhost-vi
+    chmod 664 /sys/bus/iio/devices/device0/lux
+    chmod 664 /sys/bus/iio/devices/device0/proxim_ir
 
 # power
     chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
@@ -147,7 +133,7 @@ on boot
     write /sys/devices/system/cpu/cpufreq/interactive/input_boost 1
     write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 0    
     # sleep freeze workaround
-    # write /sys/module/cpuidle/parameters/lp2_in_idle 1
+    write /sys/module/cpuidle/parameters/lp2_in_idle 1
 
 # Interactive governor settings
     chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
@@ -161,28 +147,11 @@ on boot
     chown system system /sys/devices/system/cpu/cpufreq/interactive/sustain_load
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/sustain_load
 
-# MBM modem
-# Enable USB auto suspend for MBM devices
-#    write /sys/bus/usb/devices/2-1/power/autosuspend 3
-#    write /sys/bus/usb/devices/2-1/power/control auto
-#    write /sys/bus/usb/devices/2-1/power/wakeup enabled
-#    chown radio radio /dev/cdc-wdm0
-#    chmod 0660 /dev/cdc-wdm0
-#    chown radio radio /dev/cdc-wdm1
-#    chmod 0660 /dev/cdc-wdm1
-
-# Set NITZ Feature on or off
-#    setprop mbm.ril.config.nitz yes
-# Enable RIL Fast Dormancy
-#    setprop mbm.ril.config.fd yes
-# Enable Neighboring Cell Info support
-#    setprop mbm.ril.config.nci screen
-
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
-    setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.lte     524288,1048576,2560000,262144,524288,1220608
+    setprop net.tcp.buffersize.wifi 65535,256000,512000,65535,128000,512000
+    setprop net.tcp.buffersize.lte 65535,256000,512000,65535,128000,512000
     setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.hspa    4092,87380,704512,4096,16384,262144
     setprop net.tcp.buffersize.hsupa   4092,87380,704512,4096,16384,262144
@@ -199,7 +168,7 @@ on boot
     chmod 774 /data/gps
     chown gps system /dev/ttyHS3
     chmod 0664 /dev/ttyHS3
-    chmod 0666 /sys/devices/platform/smba1006-pm-gps/power_on
+    chmod 0666 /sys/devices/platform/smba1002-pm-gps/power_on
 
 # GPS power gpio
     write /sys/class/gpio/export 171 
@@ -255,38 +224,8 @@ service dhcpcd_eth0 /system/bin/dhcpcd -ABDKL -f/system/etc/dhcpcd/dhcpcd.conf
      disabled
      oneshot
 
-service dhcpcd_usb0 /system/bin/dhcpcd -ABDKL -f/system/etc/dhcpcd/dhcpcd.conf
-     class main
-     disabled
-     oneshot
-
 service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     class main
-    disabled
-    oneshot
-
-service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep1 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep2 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep3 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-# bluetooth
-service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
     disabled
     oneshot
 
@@ -304,11 +243,6 @@ service iprenew_eth0 /system/bin/dhcpcd -n
     disabled
     oneshot
 
-service iprenew_bt-pan /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
 
 # virtual sdcard daemon running as media_rw (1023)
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
@@ -322,15 +256,7 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1
     class late_start
     disabled
 
-service fuse_sdcard2 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard2 /storage/sdcard2
-    class late_start
-    disabled
-
 service fuse_usbdisk0 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk0 /storage/usbdisk0
-    class late_start
-    disabled
-
-service fuse_usbdisk1 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk1 /storage/usbdisk1
     class late_start
     disabled
 
@@ -349,60 +275,20 @@ on nonencrypted
 on property:vold.decrypt=trigger_restart_framework
     setprop ro.fuse_sdcard ${persist.fuse_sdcard}
 
-# Enable tcpdump-service
-#service netdump-service /system/xbin/tcpdump -i any -C 5 -p -s 0 -w /sdcard/netdump.cap
-#    user root
-#    disabled
-#
-#on property:net.netdump.enable=1
-#    start netdump-service
-#
-#on property:net.netdump.enable=0
-#    stop netdump-service
-
-# 3G library selection
-service wwlanselect /system/bin/sh /system/bin/wwlan_select.sh
-    disabled
-    class main
-    user root
-    group shell
-    oneshot
-
-on device-added-/dev/ttyUSB0
-    start wwlanselect
-on device-added-/dev/ttyUSB1
-    start wwlanselect
-on device-added-/dev/ttyUSB2
-    start wwlanselect
-on device-added-/dev/ttyUSB3
-    start wwlanselect
-
-on device-removed-/dev/ttyUSB0
-    stop ril-daemon
-on device-removed-/dev/ttyUSB1
-    stop ril-daemon
-on device-removed-/dev/ttyUSB2
-    stop ril-daemon
-on device-removed-/dev/ttyUSB3
-    stop ril-daemon
-
-on property:init.svc.bootanim=stopped
-    start wwlanselect
-
 # Preboot service
-service adam_preboot /system/bin/sh /system/etc/adam_preboot.sh
+service smba_preboot /system/bin/sh /system/etc/smba_preboot.sh
     user root
     oneshot
 
 # Postboot service
-service adam_postboot /system/bin/sh /system/etc/adam_postboot.sh
+service smba_postboot /system/bin/sh /system/etc/smba_postboot.sh
     user root
     oneshot
 
 on property:init.svc.bootanim=stopped
-    start adam_postboot
+    start smba_postboot
     class_start postbootinit
 
 on property:init.svc.vold=running
-    start adam_preboot
+    start smba_preboot
     
